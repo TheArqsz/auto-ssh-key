@@ -25,7 +25,7 @@ Automatically create ssh keys and upload them to remote server
 | :-------------: | :-------------: | :-------------: |
 | `-s`, `--port` | Specifies ssh port | 22 |
 | `-f`, `--file` | Specifies ssh key filename | `current-timestamp_id_rsa` |
-| `-h`, `--help` | Displays this help | - |
+| `-h`, `--help` | Displays help | - |
 | `-l`, `--logs` | Specifies error log file | `auto-ssh-key.sh.log` |
 | `-t`, `--type` | Specifies type of a SSH key | rsa |
 | `-b`, `--bytes` | Specifies the number of bits in the key to create | 4096 |
