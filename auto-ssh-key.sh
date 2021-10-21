@@ -47,7 +47,8 @@ EOF
 
 # Set global variables and empty error log file
 error_log_file=`basename "$0"`.log
-echo -n "" > $error_log_file
+echo `date` > $error_log_file
+error_log_file=$(realpath $error_log_file)
 prune=1
 ssh_port=22
 ssh_key_type=rsa
@@ -55,13 +56,31 @@ ssh_key_bytes=4096
 current_timestamp=$(date +"%s")
 key_name=${current_timestamp}_id_rsa
 
-# Function that handles error messages in log file
+# Traps
 failure() {
-  local lineno=$1
-  local msg=$2
-  echo "### [`date`] Failed at line $lineno: '$msg'" >> $error_log_file
+	local lineno=$1
+	local msg=$2
+	if [ "$1" != "0" ]; then
+		echo "	> [`date`] Failed at line $lineno: '$msg'" >> $error_log_file
+	fi
 }
 trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
+
+cleanup() {
+	if [ "$?" = "0" ]; then
+		echo "Script finished - cleaning logs"
+		read -p "Press CTRL-C to interrupt cleaning or wait 5 sec to continue" -t 5
+		rm $error_log_file 2>/dev/null
+	fi
+}
+trap cleanup EXIT
+
+function ctrl_c() {
+	echo
+	echo "Interrupting..."
+	exit 1
+}
+trap ctrl_c INT
 
 # Loop that sets arguments for the script
 while [ -n "$1" ]; do 
@@ -198,6 +217,3 @@ else
    echo "You can log in to you server with:"
    echo "   ssh -p ${ssh_port} -i ${key_name} ${username}@${ip}"
 fi
-
-# If reached here, no errors occured - remove error log file
-rm $error_log_file 2>/dev/null
