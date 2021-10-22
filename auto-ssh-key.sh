@@ -20,7 +20,7 @@ help()
    echo "Mandatory arguments:"
    echo "   -u, --user        Specifies username"
    echo "   -i, --ip          Specifies IP or domain"
-   echo "   -p, --password    Specifies ssh password"
+   echo "   -p, --password    Specify ssh password"
    echo
    echo "Optional arguments:"
    echo "   -s, --port        Specifies ssh port (default: 22)"
@@ -98,8 +98,8 @@ while [ -n "$1" ]; do
          shift
          ;;
    	-p|--password)
-         password=$2
-         shift
+         read -s -p "Enter password: " password
+         shift 0
          ;;
    	-s|--port)
          ssh_port=$2
@@ -145,7 +145,7 @@ if [ -z "$ip" ]; then
    exit 1
 fi
 if [ -z "$password" ]; then
-   echo "Password cannot be empty - specify password"
+   echo "Password cannot be empty - use -p"
    exit 1
 fi
 
