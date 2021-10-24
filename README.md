@@ -12,6 +12,10 @@ Automatically create ssh keys and upload them to remote server via password-base
 ```bash
 ./auto-ssh-key.sh -u USER -p -i IP...
 ```
+or
+```bash
+./auto-ssh-key.sh -u USER --key myprivatekey_id_rsa -i IP...
+```
 ### Mandatory arguments:
 | Argument | Definition |
 | :-------------: | :-------------: |
