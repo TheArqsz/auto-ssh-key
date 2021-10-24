@@ -5,19 +5,21 @@
 ```
 
 # auto-ssh-key
-Automatically create ssh keys and upload them to remote server
+Automatically create ssh keys and upload them to remote server via password-based ssh connection
 
 ## Usage
 
 ```bash
-./auto-ssh-key.sh -u USER -p PASSWORD -i IP...
+./auto-ssh-key.sh -u USER -p -i IP...
 ```
 ### Mandatory arguments:
 | Argument | Definition |
 | :-------------: | :-------------: |
 | `-u`, `--user` | Specifies username |
 | `-i`, `--ip` | Specifies IP or domain |
-| `-p`, `--password` | Specifies ssh password |
+| `-p`, `--password` | Prompt for ssh password |
+OR
+| `--key` | Specifies existing SSH key |
 
 ### Optional arguments:
 

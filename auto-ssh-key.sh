@@ -14,13 +14,15 @@ fi
 # Print usage of this script
 help()
 {
-   echo "Usage: ./`basename "$0"` -u USER -p PASSWORD -i IP..."
+   echo "Usage: ./`basename "$0"` -u USER -p -i IP..."
    echo "Generate SSH keys and copy them to remote"
    echo
    echo "Mandatory arguments:"
    echo "   -u, --user        Specifies username"
    echo "   -i, --ip          Specifies IP or domain"
    echo "   -p, --password    Prompt for ssh password"
+   echo "   Instead of password, you can use existing SSH key"
+   echo "   --key             Specifies existing SSH key"
    echo
    echo "Optional arguments:"
    echo "   -s, --port        Specifies ssh port (default: 22)"
@@ -107,6 +109,10 @@ while [ -n "$1" ]; do
          ssh_port=$2
          shift
          ;;
+   	--key)
+         existing_key=$2
+         shift
+         ;;
    	-f|--file)
          key_name=$2
          shift
@@ -147,15 +153,25 @@ if [ -z "$ip" ]; then
    exit 1
 fi
 if [ -z "$password" ]; then
-   echo "Password cannot be empty - use -p"
-   exit 1
+   echo "Password is empty - checking if existing key is used"
+   if [ -z "$existing_key" ]; then
+      echo "SSH key cannot be empty when password is empty - specify SSH key or password"
+      exit 1
+   fi
 fi
 
 # Show banner before the main part of script 
 banner
 
 # Check if script can connect to ssh server with password
-sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 $username@$ip -p $ssh_port exit 2>>$error_log_file
+if [ ! -z "$password" ]; then
+   sshpass -p $password ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 $username@$ip -p $ssh_port exit 2>>$error_log_file
+elif [ ! -z "$existing_key" ]; then
+   ssh -i $existing_key -o StrictHostKeyChecking=no -o ConnectTimeout=5 $username@$ip -p $ssh_port exit 2>>$error_log_file
+else
+   echo "ERROR"
+   exit 1
+fi
 if [ $? != "0" ]; then
    echo "Cannot confirm that SSH server is working"
    echo "Check your credentials, port or server status"
@@ -182,7 +198,14 @@ else
 fi
 
 # Copy public key to remote server
-sshpass -p $password ssh-copy-id -o StrictHostKeyChecking=no -p $ssh_port -i ${key_name} $username@$ip 2>>$error_log_file 1>>$error_log_file
+if [ ! -z "$password" ]; then
+   sshpass -p $password ssh-copy-id -o StrictHostKeyChecking=no -p $ssh_port -i ${key_name} $username@$ip 2>>$error_log_file 1>>$error_log_file
+elif [ ! -z "$existing_key" ]; then
+   ssh-copy-id -f -o "IdentityFile=$existing_key" -o StrictHostKeyChecking=no -p $ssh_port -i ${key_name} $username@$ip 2>>$error_log_file 1>>$error_log_file
+else
+   echo "ERROR"
+   exit 1
+fi
 if [ $? != "0" ]; then
    echo "Cannot copy public key ${key_name}.pub"
    echo "Check logs in $error_log_file"
