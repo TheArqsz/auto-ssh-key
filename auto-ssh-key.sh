@@ -20,7 +20,7 @@ help()
    echo "Mandatory arguments:"
    echo "   -u, --user        Specifies username"
    echo "   -i, --ip          Specifies IP or domain"
-   echo "   -p, --password    Specify ssh password"
+   echo "   -p, --password    Prompt for ssh password"
    echo
    echo "Optional arguments:"
    echo "   -s, --port        Specifies ssh port (default: 22)"
@@ -70,6 +70,7 @@ cleanup() {
 	if [ "$?" = "0" ]; then
 		echo "Script finished - cleaning logs"
 		read -p "Press CTRL-C to interrupt cleaning or wait 5 sec to continue" -t 5
+      echo
 		rm $error_log_file 2>/dev/null
 	fi
 }
@@ -98,6 +99,7 @@ while [ -n "$1" ]; do
          shift
          ;;
    	-p|--password)
+         echo "WARNING You will be asked for a password - no ouput will be shown."
          read -s -p "Enter password: " password
          shift 0
          ;;
