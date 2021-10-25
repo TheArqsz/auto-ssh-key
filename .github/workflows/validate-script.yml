@@ -11,7 +11,7 @@ jobs:
         image: linuxserver/openssh-server
         env:
           PASSWORD_ACCESS: true
-          USER_PASSWORD: password
+          USER_PASSWORD: password2
           USER_NAME: test_user
         ports:
           - 12222:2222
