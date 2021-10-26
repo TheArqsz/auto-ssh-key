@@ -31,7 +31,7 @@ jobs:
         run: echo password | ./auto-ssh-key.sh -u test_user -p -i localhost -s 12222
         
       - name: Generate ssh keys
-        run: ssh-keygen -b 2048 -t rsa -f /tmp/test_id_rsa -q -N "" && sshpass -p password ssh-copy-id -p 12222 -i /tmp/test_id_rsa test_user@$localhost
+        run: ssh-keygen -b 2048 -t rsa -f /tmp/test_id_rsa -q -N "" && sshpass -p password ssh-copy-id -o StrictHostKeyChecking=no -p 12222 -i /tmp/test_id_rsa test_user@$127.0.0.1
       
       - name: Run script - key-based
         run: ./auto-ssh-key.sh -u test_user --key /tmp/test_id_rsa -i localhost -s 12222
