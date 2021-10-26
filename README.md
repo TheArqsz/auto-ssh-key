@@ -30,7 +30,7 @@ OR
 | Argument | Definition | Default value |
 | :-------------: | :-------------: | :-------------: |
 | `-s`, `--port` | Specifies ssh port | 22 |
-| `-f`, `--file` | Specifies ssh key filename | `current-timestamp_id_rsa` |
+| `-f`, `--file` | Specifies generated ssh key filename | `current-timestamp_id_rsa` |
 | `-h`, `--help` | Displays help | - |
 | `-l`, `--logs` | Specifies error log file | `auto-ssh-key.sh.log` |
 | `-t`, `--type` | Specifies type of a SSH key | rsa |
