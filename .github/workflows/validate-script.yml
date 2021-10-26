@@ -22,10 +22,18 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: sudo apt-get install -y sshpass
+        run: sudo apt-get update && sudo apt-get install -y -q sshpass
 
       - name: Change script permissions
         run: chmod +x ./auto-ssh-key.sh
       
-      - name: Run script
+      - name: Run script - password-based
         run: echo password | ./auto-ssh-key.sh -u test_user -p -i localhost -s 12222
+        
+      - name: Generate ssh keys
+        run: ssh-keygen -b 2048 -t rsa -f /tmp/test_id_rsa -q -N "" && sshpass -p password ssh-copy-id -p 12222 -i /tmp/test_id_rsa test_user@$localhost
+      
+      - name: Run script - key-based
+        run: ./auto-ssh-key.sh -u test_user --key /tmp/test_id_rsa -i localhost -s 12222
+        
+      
