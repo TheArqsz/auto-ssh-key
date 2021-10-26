@@ -26,7 +26,7 @@ help()
    echo
    echo "Optional arguments:"
    echo "   -s, --port        Specifies ssh port (default: 22)"
-   echo "   -f, --file        Specifies ssh key filename (default: current-timestamp_id_rsa)"
+   echo "   -f, --file        Specifies generated ssh key filename (default: current-timestamp_id_rsa)"
    echo "   -h, --help        Displays this help"
    echo "   -l, --logs        Specifies error log file (default: `basename "$0"`.log)"
    echo "   -t, --type        Specifies type of a SSH key (default: rsa)"
