@@ -28,12 +28,9 @@ jobs:
         run: chmod +x ./auto-ssh-key.sh
       
       - name: Run script - password-based
-        run: echo password | ./auto-ssh-key.sh -u test_user -p -i localhost -s 12222
+        run: echo password | ./auto-ssh-key.sh -u test_user -p -i localhost -s 12222 -f test_id_rsa
         
-      - name: Generate ssh keys
-        run: ssh-keygen -b 2048 -t rsa -f /tmp/test_id_rsa -q -N "" && sshpass -p password ssh-copy-id -o StrictHostKeyChecking=no -p 12222 -i /tmp/test_id_rsa test_user@$127.0.0.1
-      
       - name: Run script - key-based
-        run: ./auto-ssh-key.sh -u test_user --key /tmp/test_id_rsa -i localhost -s 12222
+        run: ./auto-ssh-key.sh -u test_user --key test_id_rsa -i localhost -s 12222
         
       
